@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cipher Escape — Amsterdam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E6C97A;
+    --dark: #0A0A0A;
+    --dark2: #111111;
+    --dark3: #1A1A1A;
+    --border: rgba(201,168,76,0.25);
+    --text: #F0EDE6;
+    --muted: rgba(240,237,230,0.5);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    overflow-x: hidden;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 3rem;
+    border-bottom: 0.5px solid var(--border);
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 600; color: var(--gold);
+    letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-links a {
+    font-size: 0.75rem; font-weight: 400; color: var(--muted);
+    text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--dark); background: var(--gold); border: none;
+    padding: 0.6rem 1.5rem; cursor: pointer; transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); }
+
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 6rem 2rem 4rem; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(201,168,76,0.04) 60px),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(201,168,76,0.04) 60px);
+  }
+  .hero-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem); font-weight: 300; line-height: 1.05;
+    color: var(--text); margin-bottom: 0.2rem;
+  }
+  .hero h1 span { color: var(--gold); font-style: italic; }
+  .hero-sub {
+    font-size: 1rem; color: var(--muted); max-width: 480px;
+    margin: 1.5rem auto 3rem; line-height: 1.7;
+  }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; }
+  .btn-primary {
+    padding: 0.9rem 2.5rem; background: var(--gold); color: var(--dark);
+    font-family: 'Barlow', sans-serif; font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-outline {
+    padding: 0.9rem 2.5rem; background: transparent; color: var(--text);
+    font-family: 'Barlow', sans-serif; font-size: 0.75rem; font-weight: 400;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    border: 0.5px solid rgba(240,237,230,0.3); cursor: pointer; transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+  }
+  .scroll-line { width: 1px; height: 40px; background: var(--border); }
+
+  section { padding: 6rem 3rem; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem; display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; line-height: 1.15; margin-bottom: 1.5rem;
+  }
+
+  #over-ons { background: var(--dark2); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 3rem;
+  }
+  .about-text p { color: var(--muted); line-height: 1.8; margin-bottom: 1rem; font-size: 0.95rem; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+  .stat { border-top: 0.5px solid var(--border); padding-top: 1rem; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem; font-weight: 300; color: var(--gold); line-height: 1;
+  }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+  .about-visual { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; aspect-ratio: 1; }
+  .about-card {
+    background: var(--dark3); border: 0.5px solid var(--border);
+    display: flex; align-items: flex-end; padding: 1.25rem; position: relative; overflow: hidden;
+  }
+  .about-card::before {
+    content: attr(data-icon); position: absolute; top: 1rem; left: 1rem;
+    font-size: 1.5rem; opacity: 0.5;
+  }
+  .about-card-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+  .about-card:nth-child(2) { margin-top: 2rem; }
+  .about-card:nth-child(4) { margin-top: -2rem; }
+
+  #kamers { background: var(--dark); }
+  .rooms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; margin-top: 3rem; }
+  .room-card {
+    background: var(--dark3); border: 0.5px solid var(--border);
+    padding: 2.5rem 2rem; position: relative; cursor: pointer;
+    transition: background 0.3s; overflow: hidden;
+  }
+  .room-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 2px; background: var(--gold); transition: width 0.4s ease;
+  }
+  .room-card:hover::after { width: 100%; }
+  .room-card:hover { background: #151515; }
+  .room-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem; font-weight: 300; color: rgba(201,168,76,0.1); line-height: 1; margin-bottom: 1.5rem;
+  }
+  .room-tag {
+    display: inline-block; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); border: 0.5px solid var(--border); padding: 0.3rem 0.7rem; margin-bottom: 1rem;
+  }
+  .room-name { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; margin-bottom: 0.75rem; }
+  .room-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .room-meta { display: flex; gap: 1.5rem; }
+  .room-meta-item { display: flex; flex-direction: column; gap: 0.2rem; }
+  .room-meta-val { font-size: 0.85rem; font-weight: 400; color: var(--text); }
+  .room-meta-key { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .diff-dots { display: flex; gap: 3px; margin-top: 0.2rem; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+  .dot.on { background: var(--gold); }
+
+  #prijzen { background: var(--dark2); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; margin-top: 3rem; }
+  .price-card { background: var(--dark3); border: 0.5px solid var(--border); padding: 2.5rem 2rem; position: relative; }
+  .price-card.featured { background: var(--dark); border: 1px solid var(--gold); }
+  .featured-badge {
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--dark);
+    font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.3rem 1rem; font-weight: 500;
+  }
+  .price-tier { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .price-name { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; margin-bottom: 1.5rem; }
+  .price-amount { display: flex; align-items: baseline; gap: 0.3rem; margin-bottom: 0.3rem; }
+  .price-eur { font-size: 1rem; color: var(--gold); }
+  .price-num { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300; color: var(--text); line-height: 1; }
+  .price-per { font-size: 0.75rem; color: var(--muted); }
+  .price-divider { height: 0.5px; background: var(--border); margin: 1.5rem 0; }
+  .price-features { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .price-features li { font-size: 0.85rem; color: var(--muted); display: flex; gap: 0.75rem; align-items: flex-start; }
+  .price-features li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+  .price-btn {
+    width: 100%; margin-top: 2rem; padding: 0.9rem;
+    background: transparent; color: var(--text);
+    font-family: 'Barlow', sans-serif; font-size: 0.7rem; font-weight: 400;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    border: 0.5px solid rgba(240,237,230,0.25); cursor: pointer; transition: all 0.2s;
+  }
+  .price-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .price-card.featured .price-btn { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+  .price-card.featured .price-btn:hover { background: var(--gold-light); }
+
+  #reserveren { background: var(--dark); }
+  .booking-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; align-items: start; }
+  .booking-info p { font-size: 0.9rem; color: var(--muted); line-height: 1.8; margin-bottom: 1.5rem; }
+  .booking-features { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .booking-feat { display: flex; gap: 1rem; align-items: flex-start; }
+  .feat-icon {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+  }
+  .feat-text { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+  .feat-title { font-weight: 400; color: var(--text); font-size: 0.85rem; margin-bottom: 0.1rem; }
+  .booking-form { background: var(--dark3); border: 0.5px solid var(--border); padding: 2.5rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+  .form-group label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+  .form-group input, .form-group select {
+    background: var(--dark2); border: 0.5px solid var(--border);
+    color: var(--text); font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem; font-weight: 300; padding: 0.75rem 1rem;
+    outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+  }
+  .form-group input::placeholder { color: var(--muted); }
+  .form-group input:focus, .form-group select:focus { border-color: var(--gold); }
+  .form-group select option { background: var(--dark2); }
+  .form-submit {
+    width: 100%; padding: 1rem; background: var(--gold); color: var(--dark);
+    font-family: 'Barlow', sans-serif; font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    border: none; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem;
+  }
+  .form-submit:hover { background: var(--gold-light); }
+
+  #contact { background: var(--dark2); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5px; margin-top: 3rem; }
+  .contact-card { background: var(--dark3); border: 0.5px solid var(--border); padding: 2.5rem 2rem; }
+  .contact-icon {
+    width: 40px; height: 40px; border: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 1.5rem;
+  }
+  .contact-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; margin-bottom: 0.75rem; }
+  .contact-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+  .contact-link { color: var(--gold); font-size: 0.85rem; text-decoration: none; }
+  .contact-link:hover { text-decoration: underline; }
+  .map-placeholder {
+    margin-top: 3rem; background: var(--dark3); border: 0.5px solid var(--border);
+    height: 260px; display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 0.75rem; color: var(--muted); font-size: 0.8rem;
+    letter-spacing: 0.1em; text-transform: uppercase; position: relative; overflow: hidden;
+  }
+  .map-placeholder::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 29px, rgba(201,168,76,0.06) 30px),
+      repeating-linear-gradient(90deg, transparent, transparent 29px, rgba(201,168,76,0.06) 30px);
+  }
+  .map-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); position: relative; z-index: 1; }
+  .map-pin-label { position: relative; z-index: 1; }
+
+  footer {
+    padding: 3rem; border-top: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; background: var(--dark);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 600; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .footer-copy { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a {
+    font-size: 0.7rem; color: var(--muted); text-decoration: none;
+    letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid, .booking-layout { grid-template-columns: 1fr; gap: 3rem; }
+    .rooms-grid, .pricing-grid, .contact-grid { grid-template-columns: 1fr; gap: 1px; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+    .about-visual { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Cipher Escape</div>
+  <div class="nav-links">
+    <a href="#over-ons">Over ons</a>
+    <a href="#kamers">Kamers</a>
+    <a href="#prijzen">Prijzen</a>
+    <a href="#reserveren">Reserveer</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('reserveren').scrollIntoView({behavior:'smooth'})">Nu boeken</button>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">Amsterdam — Est. 2019</p>
+  <h1>Durf jij<br/>te <span>ontsnappen</span>?</h1>
+  <p class="hero-sub">Meeslepende escape rooms voor 2 tot 10 spelers. Puzzel, denk, en ontsnap — maar de klok tikt.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('reserveren').scrollIntoView({behavior:'smooth'})">Reserveer nu</button>
+    <button class="btn-outline" onclick="document.getElementById('kamers').scrollIntoView({behavior:'smooth'})">Bekijk kamers</button>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<section id="over-ons">
+  <div class="section-inner">
+    <span class="section-label">Over ons</span>
+    <h2 class="section-title">Meer dan een<br/>gewone escape room</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Cipher Escape is opgericht vanuit een passie voor verhalen, puzzels en onvergetelijke ervaringen. Onze kamers zijn zorgvuldig ontworpen door theatermakers en puzzelexperts.</p>
+        <p>Elke kamer vertelt een uniek verhaal. Van een verlaten laboratorium tot een middeleeuws kasteel — jij bent de hoofdpersoon. Geen kant-en-klare pakketten, maar handgemaakte belevenissen.</p>
+        <p>Geschikt voor vrienden, families, bedrijfsuitjes en teambuilding. Wij zorgen voor een ervaring die lang bijblijft.</p>
+        <div class="about-stats">
+          <div class="stat"><div class="stat-num">4</div><div class="stat-label">Unieke kamers</div></div>
+          <div class="stat"><div class="stat-num">60</div><div class="stat-label">Minuten per spel</div></div>
+          <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Positieve reviews</div></div>
+          <div class="stat"><div class="stat-num">10k+</div><div class="stat-label">Spelers per jaar</div></div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="about-card" data-icon="🔐"><span class="about-card-label">Handgemaakte puzzels</span></div>
+        <div class="about-card" data-icon="🎭"><span class="about-card-label">Filmische sfeer</span></div>
+        <div class="about-card" data-icon="⏱️"><span class="about-card-label">60 minuten thrill</span></div>
+        <div class="about-card" data-icon="👥"><span class="about-card-label">2 tot 10 spelers</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kamers">
+  <div class="section-inner">
+    <span class="section-label">De kamers</span>
+    <h2 class="section-title">Kies jouw<br/>avontuur</h2>
+    <div class="rooms-grid">
+      <div class="room-card">
+        <div class="room-number">01</div>
+        <span class="room-tag">Thriller</span>
+        <h3 class="room-name">Het Verlaten Lab</h3>
+        <p class="room-desc">Een wetenschapper verdween spoorloos. Zijn lab staat nog in werking. Jij hebt 60 minuten om het mysterie te ontrafelen voordat het te laat is.</p>
+        <div class="room-meta">
+          <div class="room-meta-item"><span class="room-meta-val">2–8</span><span class="room-meta-key">Spelers</span></div>
+          <div class="room-meta-item"><span class="room-meta-val">60 min</span><span class="room-meta-key">Duur</span></div>
+          <div class="room-meta-item">
+            <span class="room-meta-key">Moeilijkheid</span>
+            <div class="diff-dots">
+              <div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="room-card">
+        <div class="room-number">02</div>
+        <span class="room-tag">Avontuur</span>
+        <h3 class="room-name">Het Kasteel</h3>
+        <p class="room-desc">Opgesloten in een middeleeuws kasteel. Eeuwenoude puzzels, geheime doorgangen en een vloek die verbroken moet worden voor middernacht.</p>
+        <div class="room-meta">
+          <div class="room-meta-item"><span class="room-meta-val">2–10</span><span class="room-meta-key">Spelers</span></div>
+          <div class="room-meta-item"><span class="room-meta-val">60 min</span><span class="room-meta-key">Duur</span></div>
+          <div class="room-meta-item">
+            <span class="room-meta-key">Moeilijkheid</span>
+            <div class="diff-dots">
+              <div class="dot on"></div><div class="dot on"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="room-card">
+        <div class="room-number">03</div>
+        <span class="room-tag">Horror</span>
+        <h3 class="room-name">De Bunker</h3>
+        <p class="room-desc">Een koude oorlogsschuilplaats, vergeten door de tijd. De code voor de uitgang bestaat ergens. Of toch niet? Duister, beklemmend, onvergetelijk.</p>
+        <div class="room-meta">
+          <div class="room-meta-item"><span class="room-meta-val">2–6</span><span class="room-meta-key">Spelers</span></div>
+          <div class="room-meta-item"><span class="room-meta-val">60 min</span><span class="room-meta-key">Duur</span></div>
+          <div class="room-meta-item">
+            <span class="room-meta-key">Moeilijkheid</span>
+            <div class="diff-dots">
+              <div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="prijzen">
+  <div class="section-inner">
+    <span class="section-label">Tarieven</span>
+    <h2 class="section-title">Eerlijk geprijsd,<br/>voor elk gezelschap</h2>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Klein gezelschap</div>
+        <div class="price-name">Duo & Trio</div>
+        <div class="price-amount"><span class="price-eur">€</span><span class="price-num">25</span><span class="price-per">p.p.</span></div>
+        <div class="price-per" style="color:var(--muted);font-size:0.75rem;margin-bottom:0.5rem">2–3 spelers</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Toegang tot 1 kamer naar keuze</li>
+          <li>60 minuten speeltijd</li>
+          <li>Gratis hints (max. 3)</li>
+          <li>Welkomstdrankje</li>
+        </ul>
+        <button class="price-btn" onclick="document.getElementById('reserveren').scrollIntoView({behavior:'smooth'})">Selecteer</button>
+      </div>
+      <div class="price-card featured">
+        <div class="featured-badge">Meest populair</div>
+        <div class="price-tier">Groep</div>
+        <div class="price-name">Team</div>
+        <div class="price-amount"><span class="price-eur">€</span><span class="price-num">20</span><span class="price-per">p.p.</span></div>
+        <div class="price-per" style="color:var(--muted);font-size:0.75rem;margin-bottom:0.5rem">4–6 spelers</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Toegang tot 1 kamer naar keuze</li>
+          <li>60 minuten speeltijd</li>
+          <li>Onbeperkte hints</li>
+          <li>Welkomstdrankje & snacks</li>
+          <li>Groepsfoto na afloop</li>
+        </ul>
+        <button class="price-btn" onclick="document.getElementById('reserveren').scrollIntoView({behavior:'smooth'})">Selecteer</button>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Groot gezelschap</div>
+        <div class="price-name">Bedrijf & Events</div>
+        <div class="price-amount"><span class="price-eur">€</span><span class="price-num">17</span><span class="price-per">p.p.</span></div>
+        <div class="price-per" style="color:var(--muted);font-size:0.75rem;margin-bottom:0.5rem">7–10 spelers</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Meerdere kamers tegelijk</li>
+          <li>60 minuten speeltijd</li>
+          <li>Dedicated host</li>
+          <li>Catering op aanvraag</li>
+          <li>Exclusieve tijdslot</li>
+        </ul>
+        <button class="price-btn" onclick="document.getElementById('reserveren').scrollIntoView({behavior:'smooth'})">Selecteer</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reserveren">
+  <div class="section-inner">
+    <span class="section-label">Reserveren</span>
+    <h2 class="section-title">Boek jouw<br/>sessie</h2>
+    <div class="booking-layout">
+      <div class="booking-info">
+        <p>Reserveer eenvoudig online. Kies je kamer, datum en tijd — wij zorgen voor de rest. Bevestiging ontvang je direct per e-mail.</p>
+        <p>Twijfel je? Bel ons gerust of stuur een berichtje. We helpen je graag bij het kiezen van de juiste kamer voor jouw groep.</p>
+        <div class="booking-features">
+          <div class="booking-feat">
+            <div class="feat-icon">✓</div>
+            <div class="feat-text"><div class="feat-title">Gratis annuleren tot 24u</div>Geen risico, volledige flexibiliteit tot één dag van tevoren.</div>
+          </div>
+          <div class="booking-feat">
+            <div class="feat-icon">⚡</div>
+            <div class="feat-text"><div class="feat-title">Directe bevestiging</div>Binnen één minuut ontvang je jouw reserveringsbevestiging.</div>
+          </div>
+          <div class="booking-feat">
+            <div class="feat-icon">🎁</div>
+            <div class="feat-text"><div class="feat-title">Cadeaukaarten beschikbaar</div>Geef een unieke ervaring cadeau — verkrijgbaar bij de balie.</div>
+          </div>
+        </div>
+      </div>
+      <div class="booking-form">
+        <div class="form-row">
+          <div class="form-group"><label>Voornaam</label><input type="text" placeholder="Jan" /></div>
+          <div class="form-group"><label>Achternaam</label><input type="text" placeholder="de Vries" /></div>
+        </div>
+        <div class="form-group"><label>E-mailadres</label><input type="email" placeholder="jan@email.nl" /></div>
+        <div class="form-group">
+          <label>Kamer</label>
+          <select>
+            <option value="">Selecteer een kamer</option>
+            <option>01 — Het Verlaten Lab</option>
+            <option>02 — Het Kasteel</option>
+            <option>03 — De Bunker</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Datum</label><input type="date" /></div>
+          <div class="form-group">
+            <label>Tijdslot</label>
+            <select>
+              <option value="">Kies een tijd</option>
+              <option>14:00</option><option>16:00</option><option>18:00</option><option>20:00</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Aantal spelers</label>
+          <select>
+            <option>2 spelers</option><option>3 spelers</option><option>4 spelers</option>
+            <option>5 spelers</option><option>6 spelers</option><option>7+ spelers</option>
+          </select>
+        </div>
+        <button class="form-submit">Reservering bevestigen →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-inner">
+    <span class="section-label">Contact & locatie</span>
+    <h2 class="section-title">Vind ons<br/>in Amsterdam</h2>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon">📍</div>
+        <h3 class="contact-card-title">Adres</h3>
+        <p>Keizersgracht 400<br/>1016 GD Amsterdam<br/>Nederland</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">🕐</div>
+        <h3 class="contact-card-title">Openingstijden</h3>
+        <p>Maandag – vrijdag: 14:00 – 22:00<br/>Zaterdag: 12:00 – 23:00<br/>Zondag: 12:00 – 21:00</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">✉️</div>
+        <h3 class="contact-card-title">Bereikbaar</h3>
+        <p>
+          <a href="mailto:info@cipherescape.nl" class="contact-link">info@cipherescape.nl</a><br/><br/>
+          <a href="tel:+31201234567" class="contact-link">+31 (0)20 123 45 67</a>
+        </p>
+      </div>
+    </div>
+    <div class="map-placeholder">
+      <div class="map-dot"></div>
+      <span class="map-pin-label">Keizersgracht 400, Amsterdam</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Cipher Escape</div>
+  <div class="footer-copy">© 2026 Cipher Escape Amsterdam. Alle rechten voorbehouden.</div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Voorwaarden</a>
+    <a href="#">Instagram</a>
+  </div>
+</footer>
+
+</body>
+</html>
